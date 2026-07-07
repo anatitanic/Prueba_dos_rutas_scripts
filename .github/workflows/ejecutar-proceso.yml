@@ -1,4 +1,4 @@
-name: Ejecutar Script Linux
+name: Ejecutar Proceso Avanzado
 
 on:
   # Ejecutar manualmente desde GitHub
