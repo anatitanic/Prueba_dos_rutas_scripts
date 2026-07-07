@@ -11,14 +11,14 @@
 # 3. Invoca subprocesos
 # 4. Maneja errores
 
-set -e
+set -e  # Salir si hay error
 
 # Colores para output
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
-NC='\033[0m'
+NC='\033[0m' # No Color
 
 # ============================================
 # FUNCIONES
@@ -82,6 +82,7 @@ if [ "$VAR_ENTORNO_FOUND" = false ]; then
     log_warning "Archivo var_entorno.sh no encontrado"
     log_info "Usando variables por defecto..."
     
+    # Variables por defecto (para desarrollo)
     export DB_HOST="localhost"
     export DB_PORT="3306"
     export DB_NAME="miapp_db"
@@ -119,6 +120,7 @@ for var in "${VARIABLES_REQUERIDAS[@]}"; do
         log_error "Variable no definida: $var"
         VALIDACION_OK=false
     else
+        # Mostrar variable (ocultando valores sensibles)
         if [[ "$var" == *"PASSWORD"* ]] || [[ "$var" == *"KEY"* ]] || [[ "$var" == *"SECRET"* ]]; then
             log_success "$var: ******* (oculto por seguridad)"
         else
@@ -141,17 +143,18 @@ echo ""
 
 log_info "PASO 3: Validando directorios..."
 
+# Obtener directorio actual
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
 
 log_success "Directorio del script: $SCRIPT_DIR"
 log_success "Raíz del proyecto: $PROJECT_ROOT"
 
+# Validar que existen los directorios necesarios
 DIRS_REQUERIDOS=(
     "$PROJECT_ROOT/scripts_dos/nuevo_dos"
     "$PROJECT_ROOT/data/entrada"
     "$PROJECT_ROOT/data/salida"
-    "$PROJECT_ROOT/logs"
 )
 
 for dir in "${DIRS_REQUERIDOS[@]}"; do
@@ -205,4 +208,72 @@ log_success "Subproceso encontrado y ejecutable"
 echo ""
 
 # ============================================
-# PASO 6: Ejecutar Sub
+# PASO 6: Ejecutar Subproceso
+# ============================================
+
+log_info "PASO 6: Ejecutando subproceso..."
+log_info "=========================================="
+echo ""
+
+# Exportar variables para que el subproceso las use
+export PROJECT_ROOT
+export SCRIPT_DIR
+
+# Ejecutar subproceso
+if bash "$SUBPROCESO"; then
+    log_success "Subproceso completado exitosamente"
+else
+    log_error "Subproceso falló"
+    exit 1
+fi
+
+echo ""
+
+# ============================================
+# PASO 7: Generar Reporte Final
+# ============================================
+
+log_info "PASO 7: Generando reporte final..."
+
+FECHA=$(date +%Y%m%d_%H%M%S)
+REPORTE="$PROJECT_ROOT/data/salida/reporte_principal_$FECHA.txt"
+
+cat > "$REPORTE" <<EOF
+REPORTE DEL PROCESO PRINCIPAL
+==============================
+Fecha: $(date)
+Usuario: $(whoami)
+Hostname: $(hostname)
+
+CONFIGURACIÓN:
+- Ambiente: $APP_ENVIRONMENT
+- Base de Datos: $DB_HOST:$DB_PORT/$DB_NAME
+- Usuario BD: $DB_USER
+- API Key: ${API_KEY:0:10}...
+- Nivel de Log: $LOG_LEVEL
+
+DIRECTORIOS:
+- Script Principal: $SCRIPT_DIR
+- Subproceso: $SUBPROCESO
+- Entrada: $ARCHIVO_ENTRADA
+- Salida: $PROJECT_ROOT/data/salida/
+
+EJECUCIÓN:
+- Subproceso: ✅ Completado
+- Reporte: ✅ Generado
+
+ESTADO: ✅ ÉXITO
+EOF
+
+log_success "Reporte generado: $REPORTE"
+echo ""
+
+# ============================================
+# FIN DEL SCRIPT
+# ============================================
+
+log_info "=========================================="
+log_success "Proceso Principal Completado"
+log_info "=========================================="
+log_info "Archivos generados en: $PROJECT_ROOT/data/salida/"
+log_info "=========================================="
