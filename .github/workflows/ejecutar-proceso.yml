@@ -1,1 +1,45 @@
+name: Ejecutar Script Linux
 
+on:
+  # Ejecutar manualmente desde GitHub
+  workflow_dispatch:
+  
+  # Ejecutar cada día a las 10:00 AM (UTC)
+  schedule:
+    - cron: '0 10 * * *'
+
+jobs:
+  ejecutar-script:
+    name: Procesar Datos
+    runs-on: ubuntu-latest
+    
+    steps:
+      # Paso 1: Descargar el código del repositorio
+      - name: Checkout código
+        uses: actions/checkout@v4
+      
+      # Paso 2: Dar permisos de ejecución al script
+      - name: Dar permisos al script
+        run: chmod +x scripts/procesar_datos.sh
+      
+      # Paso 3: Ejecutar el script
+      - name: Ejecutar script
+        run: ./scripts/procesar_datos.sh
+      
+      # Paso 4: Guardar el resultado como artefacto
+      - name: Guardar resultado
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: resultado-${{ github.run_number }}
+          path: data/salida/
+          retention-days: 30
+      
+      # Paso 5: Mostrar resumen
+      - name: Resumen de ejecución
+        if: always()
+        run: |
+          echo "✅ Workflow completado"
+          echo "Run ID: ${{ github.run_id }}"
+          echo "Run Number: ${{ github.run_number }}"
+          echo "Fecha: $(date)"
