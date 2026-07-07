@@ -1,0 +1,22 @@
+# Variables sensibles - NUNCA en el repositorio
+config/var_entorno.sh
+.env
+.env.local
+.env.*.local
+
+# Logs
+*.log
+logs/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Datos
+data/salida/*
+!data/salida/.gitkeep
