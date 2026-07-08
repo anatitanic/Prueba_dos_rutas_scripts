@@ -6,7 +6,7 @@ on:
   
   # Ejecutar cada día a las 10:00 AM (UTC)
   schedule:
-    - cron: '0 10 * * *'
+    - cron: '0 09 * * *'
 
 jobs:
   ejecutar-script:
