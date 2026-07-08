@@ -6,7 +6,7 @@ on:
   
   # Ejecutar cada día a las 10:00 AM (UTC)
   schedule:
-    - cron: '40 08 * * *'
+    - cron: '20 09 * * *'
     - cron: '30 09 * * *'
 
 jobs:
@@ -21,11 +21,11 @@ jobs:
       
       # Paso 2: Dar permisos de ejecución al script
       - name: Dar permisos al script
-        run: chmod +x /scripts/procesar_datos.sh
+        run: chmod +x scripts/proceso_principal.sh
       
       # Paso 3: Ejecutar el script
       - name: Ejecutar script
-        run: ./scripts/procesar_datos.sh
+        run: ./scripts/proceso_principal.sh
       
       # Paso 4: Guardar el resultado como artefacto
       - name: Guardar resultado
