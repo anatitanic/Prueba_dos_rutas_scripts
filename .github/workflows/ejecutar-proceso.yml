@@ -21,7 +21,7 @@ jobs:
       
       # Paso 2: Dar permisos de ejecución al script
       - name: Dar permisos al script
-        run: chmod +x scripts/procesar_datos.sh
+        run: chmod +x /scripts/procesar_datos.sh
       
       # Paso 3: Ejecutar el script
       - name: Ejecutar script
