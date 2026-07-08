@@ -6,7 +6,7 @@ on:
   
   # Ejecutar cada día a las 10:00 AM (UTC)
   schedule:
-    - cron: '30 08 * * *'
+    - cron: '40 08 * * *'
     - cron: '0 09 * * *'
 
 jobs:
