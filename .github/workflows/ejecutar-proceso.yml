@@ -4,7 +4,7 @@ on:
   # Ejecutar manualmente desde GitHub
   workflow_dispatch:
   
-  # Ejecutar cada día a las 10:00 AM (UTC)
+  # Ejecutar cada día a la hora indicada
   schedule:
     - cron: '45 08 * * *'
   
