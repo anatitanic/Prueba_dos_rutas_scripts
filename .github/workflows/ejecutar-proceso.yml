@@ -6,7 +6,7 @@ on:
   
   # Ejecutar cada día a la hora indicada
   schedule:
-    - cron: '00 11 * * *'
+    - cron: '30 09 * * *'
   
 
 jobs:
