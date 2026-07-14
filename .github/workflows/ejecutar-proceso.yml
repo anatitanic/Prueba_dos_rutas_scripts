@@ -17,7 +17,7 @@ jobs:
     steps:
       # Paso 1: Descargar el código del repositorio
       - name: Checkout código
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       
       # Paso 2: Dar permisos de ejecución al script
       - name: Dar permisos al script
@@ -30,7 +30,7 @@ jobs:
       # Paso 4: Guardar el resultado como artefacto
       - name: Guardar resultado
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: resultado-${{ github.run_number }}
           path: data/salida/
